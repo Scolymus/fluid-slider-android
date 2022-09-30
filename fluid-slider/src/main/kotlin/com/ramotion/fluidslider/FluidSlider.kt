@@ -21,7 +21,8 @@ class FluidSlider @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0,
-        size: Size = Size.NORMAL) : View(context, attrs, defStyleAttr) {
+        size: Size = Size.NORMAL,
+        vertical_offset: Float = 1.5f) : View(context, attrs, defStyleAttr) {
 
     /**
      * Sizes that can be used.
@@ -42,11 +43,11 @@ class FluidSlider @JvmOverloads constructor(
 
     private companion object {
         const val BAR_CORNER_RADIUS = 2
-        const val BAR_VERTICAL_OFFSET = 1.5f
+        var BAR_VERTICAL_OFFSET = 1.5f
         const val BAR_INNER_HORIZONTAL_OFFSET = 0
 
         const val SLIDER_WIDTH = 4
-        const val SLIDER_HEIGHT = 1 + BAR_VERTICAL_OFFSET
+        var SLIDER_HEIGHT = 1 + BAR_VERTICAL_OFFSET
 
         const val TOP_CIRCLE_DIAMETER = 1
         const val BOTTOM_CIRCLE_DIAMETER = 25.0f
@@ -290,6 +291,8 @@ class FluidSlider @JvmOverloads constructor(
 
         val density = context.resources.displayMetrics.density
 
+        Companion.BAR_VERTICAL_OFFSET = vertical_offset
+
         if (attrs != null) {
             val a = context.theme.obtainStyledAttributes(attrs, R.styleable.FluidSlider, defStyleAttr, 0)
             try {
@@ -340,7 +343,7 @@ class FluidSlider @JvmOverloads constructor(
      * @param size Size of FluidSlider.
      * @see Size
      */
-    constructor(context: Context, size: Size) : this(context, null, 0, size)
+    constructor(context: Context, size: Size, vertical_offset: Float) : this(context, null, 0, size, vertical_offset)
 
     override fun onSaveInstanceState(): Parcelable {
         return State(super.onSaveInstanceState(),
@@ -608,6 +611,11 @@ class FluidSlider @JvmOverloads constructor(
         }
         animation.duration = duration
         animation.start()
+    }
+
+    fun change_vertical_offset(vertical_offset: Float){
+        Companion.BAR_VERTICAL_OFFSET = vertical_offset
+        this.refreshDrawableState()
     }
 
 }
